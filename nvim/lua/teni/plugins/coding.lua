@@ -5,20 +5,34 @@ return {
     lazy = false,
   },
 
-  -- Markdown Preview
+  -- Markdown Rendering (in-editor preview)
   {
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    build = 'cd app && npm install',
-    init = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
-    end,
+    'MeanderingProgrammer/render-markdown.nvim',
+    ft = { 'markdown' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    opts = {
+      -- Render headings with different highlights
+      headings = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+      -- Render code blocks with background
+      code = {
+        enabled = true,
+        sign = true,
+        style = 'full',
+        position = 'left',
+        width = 'full',
+      },
+      -- Render checkboxes
+      checkbox = {
+        enabled = true,
+        unchecked = { icon = '󰄱 ' },
+        checked = { icon = '󰱒 ' },
+      },
+    },
     keys = {
       {
         '<leader>mp',
-        ft = 'markdown',
-        '<cmd>MarkdownPreviewToggle<cr>',
-        desc = 'Markdown Preview',
+        '<cmd>RenderMarkdown toggle<cr>',
+        desc = 'Toggle Markdown Rendering',
       },
     },
   },

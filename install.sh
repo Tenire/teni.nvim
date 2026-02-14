@@ -42,8 +42,47 @@ create_symlink() {
     info "Created symlink: $target -> $source"
 }
 
+install_nvim() {
+    info "Checking for Neovim..."
+    if command -v nvim >/dev/null 2>&1; then
+        info "Neovim is already installed: $(nvim --version | head -n 1)"
+    else
+        warn "Neovim not found. Installing v0.11.2..."
+        
+        # Download AppImage
+        if curl -LO https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.appimage; then
+            # Make executable
+            chmod u+x nvim-linux-x86_64.appimage
+            
+            # Move to /usr/local/bin (requires sudo)
+            info "Moving nvim AppImage to /usr/local/bin/nvim (requires sudo)..."
+            if sudo mv nvim-linux-x86_64.appimage /usr/local/bin/nvim; then
+                 info "Neovim installed successfully."
+            else
+                 error "Failed to move nvim to /usr/local/bin. Please check permissions."
+                 rm -f nvim-linux-x86_64.appimage
+                 exit 1
+            fi
+        else
+            error "Failed to download Neovim AppImage."
+            exit 1
+        fi
+        
+        # Verify
+        if command -v nvim >/dev/null 2>&1; then
+             info "Verified installation: $(nvim --version | head -n 1)"
+        else
+             error "Neovim installation failed or not found in PATH."
+             exit 1
+        fi
+    fi
+}
+
 main() {
     info "Installing dev config from $SCRIPT_DIR"
+
+    # Check and install nvim if needed
+    install_nvim
 
     # Ensure .config directory exists
     mkdir -p "$CONFIG_DIR"

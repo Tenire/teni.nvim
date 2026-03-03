@@ -107,12 +107,25 @@ main() {
 
     # Install dependencies
     info "Checking for required tools..."
-    if command -v npm >/dev/null 2>&1; then
+    if command -v pnpm >/dev/null 2>&1; then
+        info "pnpm found. Installing tree-sitter-cli globally..."
+        pnpm add -g tree-sitter-cli
+        # pnpm blocks install scripts by default; approve tree-sitter-cli to download its binary
+        info "Approving tree-sitter-cli build scripts..."
+        echo "y" | pnpm approve-builds -g tree-sitter-cli 2>/dev/null || true
+    elif command -v npm >/dev/null 2>&1; then
         info "npm found. Installing tree-sitter-cli globally..."
         npm install -g tree-sitter-cli
     else
-        warn "npm not found. Skipping tree-sitter-cli installation."
-        warn "Please install nodejs and npm to ensure full functionality."
+        warn "Neither pnpm nor npm found. Skipping tree-sitter-cli installation."
+        warn "Please install nodejs and pnpm/npm to ensure full functionality."
+    fi
+
+    # Verify tree-sitter-cli installation
+    if command -v tree-sitter >/dev/null 2>&1; then
+        info "tree-sitter-cli installed: $(tree-sitter --version)"
+    else
+        warn "tree-sitter-cli not found in PATH. Treesitter parsers may fail to compile."
     fi
 
     info "Installation complete!"

@@ -132,45 +132,44 @@ return {
 
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-    -- LSP servers configuration
-    local servers = {
-      ts_ls = {},
-      eslint = {},
-      ruff = {},
-      pyright = {},
-      lua_ls = {
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
+    -- Configure LSP servers using vim.lsp.config (Neovim 0.11+ API)
+    vim.lsp.config('*', {
+      capabilities = capabilities,
+    })
+
+    vim.lsp.config('lua_ls', {
+      settings = {
+        Lua = {
+          completion = {
+            callSnippet = 'Replace',
+          },
+          diagnostics = {
+            disable = { 'param-type-mismatch', 'assign-type-mismatch', 'redundant-parameter' },
+            globals = { 'path' },
           },
         },
       },
-    }
+    })
 
     -- Tools to install (formatters, linters, etc.)
-    local tools = {
+    local ensure_installed = {
+      -- LSP servers
+      'ts_ls',
+      'eslint',
+      'ruff',
+      'pyright',
+      'lua_ls',
+      -- Formatters & linters
       'stylua',
       'prettier',
       'prettierd',
       'markdownlint',
     }
 
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, tools)
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
     require('mason-lspconfig').setup {
-      ensure_installed = {},
-      automatic_installation = false,
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
-        end,
-      },
+      automatic_enable = true,
     }
   end,
 }

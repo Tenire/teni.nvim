@@ -37,12 +37,12 @@ return {
     },
   },
 
-  -- Auto-close tags (html, xml, etc.)
+  -- Xmake build system integration
   {
-    'windwp/nvim-ts-autotag',
-    event = { 'BufReadPre', 'BufNewFile' },
-    config = function()
-      require('nvim-ts-autotag').setup()
-    end,
+    'Mythos-404/xmake.nvim',
+    version = '^3',
+    lazy = true,
+    event = 'BufReadPost',
+    config = true,
   },
 }

@@ -20,10 +20,9 @@ vim.o.relativenumber = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
 
--- Clipboard (scheduled to avoid startup delay)
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+-- Clipboard: use OSC52 so copy works over SSH (terminal escape sequence → local clipboard)
+vim.g.clipboard = 'osc52'
+vim.o.clipboard = 'unnamedplus'
 
 -- Indentation
 vim.o.breakindent = true

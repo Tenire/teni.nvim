@@ -19,5 +19,9 @@ vim.keymap.set('n', 'tk', ':tabprevious<CR>', { desc = 'Next tab' })
 -- Insert mode escape
 vim.keymap.set('i', 'jk', '<Esc>', { desc = 'Use jk in input mode as Esc' })
 
+-- Mouse drag in Insert mode → exit to Normal so drag creates proper Visual selection
+-- Simple click stays in Insert mode (repositions cursor as usual)
+vim.keymap.set('i', '<LeftDrag>', '<Esc><LeftDrag>', { desc = 'Start Visual selection on drag in Insert mode' })
+
 -- Command mode shortcut
 vim.keymap.set('n', ';', ':', { desc = 'Use ; as colon' })

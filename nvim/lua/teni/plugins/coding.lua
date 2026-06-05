@@ -41,6 +41,9 @@ return {
   {
     'Mythos-404/xmake.nvim',
     version = '^3',
+    cond = function()
+      return vim.fn.executable 'xmake' == 1
+    end,
     lazy = true,
     event = 'BufReadPost',
     config = true,

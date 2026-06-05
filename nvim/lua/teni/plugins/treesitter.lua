@@ -2,6 +2,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    pin = true,
     lazy = false,
     config = function()
       require('nvim-treesitter').setup {
@@ -47,6 +48,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
     branch = 'main',
+    pin = true,
     event = { 'BufReadPost', 'BufNewFile' },
     config = function()
       require('nvim-treesitter-textobjects').setup {

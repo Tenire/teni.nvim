@@ -119,6 +119,14 @@ Personal Neovim configuration. Focused on speed, clean UI, and efficiency.
 
 ## 📦 Installation
 
+This config targets **Neovim 0.11.x**. Staying on the 0.11 line avoids plugin/API drift from newer Neovim releases while keeping patch upgrades within the same interface generation.
+
+`nvim/lazy-lock.json` is part of the config. If the same config is used by both a normal user and root, each account has its own Lazy plugin cache, so root must sync its own cache too:
+
+```bash
+sudo nvim --headless "+Lazy! sync" +qa
+```
+
 ```bash
 # Clone
 git clone https://github.com/yourusername/Teni.nvim.git ~/.config/Teni.nvim

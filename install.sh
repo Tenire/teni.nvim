@@ -4,6 +4,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="${HOME}/.config"
+NVIM_VERSION="${NVIM_VERSION:-v0.11.5}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -45,12 +46,19 @@ create_symlink() {
 install_nvim() {
     info "Checking for Neovim..."
     if command -v nvim >/dev/null 2>&1; then
-        info "Neovim is already installed: $(nvim --version | head -n 1)"
+        local version_line
+        version_line="$(nvim --version | head -n 1)"
+        if [[ "$version_line" == NVIM\ v0.11.* ]]; then
+            info "Neovim is already installed: $version_line"
+        else
+            warn "Installed Neovim is not 0.11.x: $version_line"
+            warn "This config targets Neovim 0.11.x to keep plugin/API compatibility stable."
+        fi
     else
-        warn "Neovim not found. Installing v0.11.2..."
+        warn "Neovim not found. Installing $NVIM_VERSION..."
         
         # Download AppImage
-        if curl -LO https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.appimage; then
+        if curl -LO "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/nvim-linux-x86_64.appimage"; then
             # Make executable
             chmod u+x nvim-linux-x86_64.appimage
             

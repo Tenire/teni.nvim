@@ -119,6 +119,14 @@
 
 ## 📦 安装
 
+这套配置面向 **Neovim 0.11.x**。固定在 0.11 这一代是为了避免更新到更高 Neovim 主线后插件/API 接口漂移；0.11 内的补丁版本升级仍应保持同一代接口。
+
+`nvim/lazy-lock.json` 是配置的一部分。如果普通用户和 root 共用同一套配置，两边的 Lazy 插件缓存仍然是分开的，所以 root 也需要单独按 lock 同步：
+
+```bash
+sudo nvim --headless "+Lazy! sync" +qa
+```
+
 ```bash
 # 克隆仓库
 git clone https://github.com/yourusername/Teni.nvim.git ~/.config/Teni.nvim
